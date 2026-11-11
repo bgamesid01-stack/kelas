@@ -1,0 +1,187 @@
+/* css/dokumentasi.css
+   Galeri dokumentasi dan tampilan foto besar (lightbox). */
+
+#dokumentasi {
+  margin-top: 22px;
+}
+
+.dk-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-flow: dense;
+  gap: 12px;
+}
+
+.dk-item {
+  position: relative;
+  display: block;
+  padding: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: var(--line);
+  border-radius: 16px;
+  background: #ffe3ee;
+  cursor: zoom-in;
+  box-shadow: 0 4px 14px rgba(214,80,127,.15);
+  transition: transform .2s, box-shadow .2s;
+}
+
+.dk-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(214,80,127,.28);
+}
+
+.dk-item img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s;
+}
+
+.dk-item:hover img {
+  transform: scale(1.05);
+}
+
+.dk-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 26px 12px 10px;
+  text-align: left;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(74,36,51,.78));
+}
+
+.dk-cap b {
+  font-size: .92rem;
+  line-height: 1.25;
+}
+
+.dk-cap small {
+  font-size: .75rem;
+  font-weight: 700;
+  opacity: .85;
+}
+
+/* ===== Foto besar (lightbox) ===== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 28;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 56px 10px 20px;
+  background: rgba(40,16,30,.92);
+}
+
+.lb-prev { grid-column: 1; grid-row: 1; }
+.lb-fig  { grid-column: 2; grid-row: 1; }
+.lb-next { grid-column: 3; grid-row: 1; }
+
+.lb-fig {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  max-height: 100%;
+  margin: 0;
+  color: #fff;
+}
+
+.lb-fig img {
+  max-width: 100%;
+  max-height: 68vh;
+  border-radius: 14px;
+  object-fit: contain;
+  background: rgba(0,0,0,.2);
+}
+
+.lb-fig figcaption {
+  display: grid;
+  gap: 2px;
+  max-width: 620px;
+  text-align: center;
+}
+
+.lb-fig figcaption span {
+  font-size: .9rem;
+  font-weight: 700;
+  opacity: .8;
+}
+
+.lb-fig figcaption p {
+  margin: 6px 0 0;
+  font-size: .95rem;
+}
+
+.lb-nav,
+.lb-x {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1.5px solid rgba(255,255,255,.5);
+  border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  transition: background .15s;
+}
+
+.lb-nav:hover,
+.lb-x:hover {
+  background: rgba(255,255,255,.3);
+}
+
+.lb-x {
+  position: absolute;
+  top: calc(10px + env(safe-area-inset-top, 0px));
+  right: 12px;
+  font-size: 1.1rem;
+}
+
+/* Desktop: foto pertama dibuat besar */
+@media (min-width: 900px) {
+  .dk-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .dk-item:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+  .dk-cap b {
+    font-size: 1rem;
+  }
+  .dk-item:first-child .dk-cap b {
+    font-size: 1.25rem;
+  }
+}
+
+/* HP: tombol pindah foto di bawah */
+@media (max-width: 560px) {
+  .lightbox {
+    grid-template-columns: 1fr;
+    padding: 60px 12px 90px;
+  }
+  .lb-fig {
+    grid-column: 1;
+  }
+  .lb-nav {
+    position: absolute;
+    bottom: 24px;
+  }
+  .lb-prev { left: calc(50% - 56px); }
+  .lb-next { left: calc(50% + 10px); }
+}
