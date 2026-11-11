@@ -1,6 +1,3 @@
-/* css/protect.css
-   Mencegah teks dipilih atau disalin. */
-
 body {
   -webkit-user-select: none;
   -moz-user-select: none;
