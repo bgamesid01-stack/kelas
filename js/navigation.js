@@ -1,3 +1,7 @@
+/* js/navigation.js
+   Perpindahan halaman, navbar, dan menu garis tiga. */
+
+/* ---- HALAMAN ---- */
 let curPage = "beranda";
 function go(p){
   curPage = p;
@@ -10,6 +14,7 @@ function go(p){
   window.scrollTo({ top: t ? t.getBoundingClientRect().top + window.scrollY - 84 : 0, behavior: "smooth" });
 }
 
+/* ---- MENU GARIS TIGA ---- */
 const drawer = $("drawer"), scrim = $("scrim"), menuBtn = $("menuBtn");
 function setMenu(open){
   drawer.classList.toggle("on", open); scrim.classList.toggle("on", open);

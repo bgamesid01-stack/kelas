@@ -1,7 +1,11 @@
+/* js/auth.js
+   Alur masuk: login Google, mode demo, dan kewajiban mengisi nama lengkap. */
+
+/* ---- ALUR UTAMA ---- */
 function route(){
   if(!session){ show("vLogin"); return }
   const p = profiles[session.sub];
-  if(!p || !p.fullName){ 
+  if(!p || !p.fullName){ // login pertama kali: wajib isi nama lengkap
     openNameModal(false); show("vHome","vName"); renderHome(); return;
   }
   renderHome(); show("vHome");
@@ -12,6 +16,7 @@ function onLogin(user){
   route();
 }
 
+/* ---- GOOGLE LOGIN ---- */
 function decodeJwt(token){
   const b = token.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");
   const json = decodeURIComponent(atob(b).split("").map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)).join(""));
@@ -34,6 +39,7 @@ function initGoogle(){
 }
 $("demoBtn").onclick = () => onLogin({ sub:"demo-user", email:"siswa.demo@gmail.com", picture:"", gname:"Siswa Demo" });
 
+/* ---- NAMA LENGKAP ---- */
 function openNameModal(isEdit){
   editing = isEdit;
   $("nameTitle").textContent = isEdit ? "Ubah nama" : "Halo, teman baru!";

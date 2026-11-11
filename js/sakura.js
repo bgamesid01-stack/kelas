@@ -1,3 +1,6 @@
+/* js/sakura.js
+   Gambar bunga sakura (SVG) dan animasi kelopak berjatuhan. */
+
 let _fid = 0;
 function flowerSVG(){
   const id = "g" + (++_fid);

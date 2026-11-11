@@ -1,7 +1,9 @@
+/* js/notes.js
+   Fitur Catatan: teks, daftar centang, dan struktur bertingkat. */
+
 let notes = [], activeId = null, saveT;
 const TIPE = { teks:["📝","Catatan"], centang:["✅","Daftar centang"], struktur:["🌳","Struktur"] };
 const uid = () => Math.random().toString(36).slice(2, 9);
-const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
 const nKey = () => "kelas_catatan_" + session.sub;
 const cur = () => notes.find(x => x.id === activeId);
 function persist(){ store.set(nKey(), notes); const e = $("saved"); if(e) e.textContent = "Tersimpan ✓" }

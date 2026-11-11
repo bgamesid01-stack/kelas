@@ -1,3 +1,6 @@
+/* js/home.js
+   Isi beranda: pengumuman, tugas kelas, dan jadwal pelajaran. */
+
 function paintAvatar(el, name){
   el.innerHTML = "";
   const first = (name[0] || "?").toUpperCase();
