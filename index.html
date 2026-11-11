@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kelas Ceria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+  <meta name="description" content="Web kelas bertema bunga sakura: pengumuman, tugas, jadwal, dan catatan.">
+  <meta name="theme-color" content="#ffd3e3">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/notes.css">
+  <link rel="stylesheet" href="css/protect.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<main id="vLogin" class="login hidden">
+  <div class="card">
+    <svg class="mascot" data-flower aria-hidden="true"></svg>
+    <h1>Kelas Ceria!</h1>
+    <p>Masuk dulu yuk, biar bisa lihat jadwal, pengumuman, dan tugas kelas.</p>
+    <div id="gbtn"></div>
+    <button id="demoBtn" class="btn white hidden" type="button">Coba mode demo</button>
+  </div>
+</main>
+
+<!-- BERANDA -->
+<div id="vHome" class="hidden">
+  <header class="nav">
+    <div class="nav-in">
+      <a class="brand" href="#beranda" data-go="beranda">
+        <svg data-flower aria-hidden="true"></svg>
+        <span>Kelas Ceria</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#pengumuman" data-go="pengumuman">Pengumuman</a>
+        <a href="#tugas" data-go="tugas">Tugas kelas</a>
+        <a href="#jadwal" data-go="jadwal">Jadwal</a>
+        <a href="#catatan" data-go="catatan">Catatan</a>
+      </nav>
+      <button id="menuBtn" class="burger" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <div id="scrim" class="scrim"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Menu">
+    <div class="dr-head">
+      <div id="drAvatar" class="avatar"></div>
+      <div><b id="drName"></b><small id="drMail"></small></div>
+      <button id="closeMenu" class="x" type="button" aria-label="Tutup menu">&#10005;</button>
+    </div>
+    <nav class="dr-links">
+      <a href="#beranda" data-go="beranda" class="on">Beranda</a>
+      <a href="#pengumuman" data-go="pengumuman">Pengumuman</a>
+      <a href="#tugas" data-go="tugas">Tugas kelas</a>
+      <a href="#jadwal" data-go="jadwal">Jadwal</a>
+      <a href="#catatan" data-go="catatan">Catatan</a>
+    </nav>
+    <div class="dr-foot">
+      <button id="editName" class="btn mint" type="button">Ubah nama</button>
+      <button id="logout" class="btn pink" type="button">Keluar</button>
+    </div>
+  </aside>
+
+  <section class="hero2 pg-home" id="top">
+    <div class="sun" aria-hidden="true"></div>
+    <svg class="fuji" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true"><path d="M0 220V190L300 150 520 92 650 40 720 20 790 40 930 100 1150 150 1440 186V220Z" fill="#f6c9db" opacity=".8"/><path d="M650 40L720 20 790 40 762 54 736 42 710 58 686 44Z" fill="#fff"/></svg>
+    <svg class="branch" viewBox="0 0 580 280" aria-hidden="true"><path d="M-10 30C120 44 200 20 300 82S460 150 575 140" fill="none" stroke="#7a4b3a" stroke-width="9" stroke-linecap="round"/><path d="M150 38C172 90 150 132 190 168M300 82C330 42 380 42 410 12M372 118C392 168 378 198 410 226" fill="none" stroke="#7a4b3a" stroke-width="5" stroke-linecap="round"/><circle cx="40.0" cy="26.9" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="46.8" cy="31.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="44.2" cy="39.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="35.8" cy="39.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="33.2" cy="31.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="40" cy="34" r="3.6" fill="#e8719a"/><circle cx="92.0" cy="36.0" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="97.8" cy="40.1" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="95.6" cy="46.9" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="88.4" cy="46.9" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="86.2" cy="40.1" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="92" cy="42" r="3.1" fill="#e8719a"/><circle cx="150.0" cy="24.3" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="157.3" cy="29.6" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="154.5" cy="38.2" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="145.5" cy="38.2" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="142.7" cy="29.6" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="150" cy="32" r="3.9" fill="#e8719a"/><circle cx="150.0" cy="93.4" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="156.3" cy="98.0" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="153.9" cy="105.3" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="146.1" cy="105.3" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="143.7" cy="98.0" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="150" cy="100" r="3.4" fill="#e8719a"/><circle cx="188.0" cy="153.9" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="193.8" cy="158.1" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="191.6" cy="164.9" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="184.4" cy="164.9" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="182.2" cy="158.1" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="188" cy="160" r="3.1" fill="#e8719a"/><circle cx="228.0" cy="46.9" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="234.8" cy="51.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="232.2" cy="59.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="223.8" cy="59.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="221.2" cy="51.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="228" cy="54" r="3.6" fill="#e8719a"/><circle cx="262.0" cy="94.5" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="267.2" cy="98.3" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="265.2" cy="104.4" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="258.8" cy="104.4" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="256.8" cy="98.3" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="262" cy="100" r="2.8" fill="#e8719a"/><circle cx="300.0" cy="74.3" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="307.3" cy="79.6" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="304.5" cy="88.2" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="295.5" cy="88.2" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="292.7" cy="79.6" r="8.1" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="300" cy="82" r="3.9" fill="#e8719a"/><circle cx="338.0" cy="42.0" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="343.8" cy="46.1" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="341.6" cy="52.9" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="334.4" cy="52.9" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="332.2" cy="46.1" r="6.4" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="338" cy="48" r="3.1" fill="#e8719a"/><circle cx="398.0" cy="16.9" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="404.8" cy="21.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="402.2" cy="29.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="393.8" cy="29.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="391.2" cy="21.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="398" cy="24" r="3.6" fill="#e8719a"/><circle cx="372.0" cy="113.4" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="378.3" cy="118.0" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="375.9" cy="125.3" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="368.1" cy="125.3" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="365.7" cy="118.0" r="7.0" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="372" cy="120" r="3.4" fill="#e8719a"/><circle cx="432.0" cy="124.5" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="437.2" cy="128.3" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="435.2" cy="134.4" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="428.8" cy="134.4" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="426.8" cy="128.3" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="432" cy="130" r="2.8" fill="#e8719a"/><circle cx="505.0" cy="134.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="511.8" cy="139.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="509.2" cy="147.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="500.8" cy="147.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="498.2" cy="139.8" r="7.5" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="505" cy="142" r="3.6" fill="#e8719a"/><circle cx="548.0" cy="130.5" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="553.2" cy="134.3" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="551.2" cy="140.4" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="544.8" cy="140.4" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="542.8" cy="134.3" r="5.8" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="548" cy="136" r="2.8" fill="#e8719a"/><circle cx="196.0" cy="121.0" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="200.7" cy="124.5" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="198.9" cy="130.0" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="193.1" cy="130.0" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="191.3" cy="124.5" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="196" cy="126" r="2.5" fill="#e8719a"/><circle cx="110.0" cy="71.0" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="114.7" cy="74.5" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="112.9" cy="80.0" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="107.1" cy="80.0" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="105.3" cy="74.5" r="5.2" fill="#ffcadc" stroke="#f08fb0" stroke-width=".8"/><circle cx="110" cy="76" r="2.5" fill="#e8719a"/></svg>
+    <div class="hero-in">
+      <svg class="bloom" data-flower aria-hidden="true"></svg>
+      <h1><span>Selamat datang</span><span>di web kelas kami</span></h1>
+    </div>
+    <svg class="hills" viewBox="0 0 1440 190" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 80Q240 10 520 70T1040 50T1440 85V200H0Z" fill="#f9d3e1" stroke="#f2b3c9" stroke-width="2"/>
+      <path d="M0 140Q300 80 640 130T1440 105V200H0Z" fill="#fff1f6" stroke="#f2b3c9" stroke-width="2"/>
+    </svg>
+  </section>
+
+  <main class="content pg-home">
+    <div class="wrap">
+      <div class="cols">
+        <section class="card" id="pengumuman">
+          <div class="ch"><span class="ico" style="background:var(--pink)">🎐</span><h2>Pengumuman</h2></div>
+          <ul class="ann" id="ann"></ul>
+        </section>
+        <section class="card" id="tugas">
+          <div class="ch"><span class="ico" style="background:var(--mint)">✏️</span><h2>Tugas kelas</h2></div>
+          <p id="taskInfo" class="sub" style="margin-bottom:8px"></p>
+          <div class="bar" style="margin:0 0 14px"><i id="bar"></i></div>
+          <ul class="tasks" id="tasks"></ul>
+        </section>
+      </div>
+      <section class="card" id="jadwal">
+        <div class="ch"><span class="ico" style="background:var(--sky)">🗓️</span><h2>Jadwal pelajaran</h2></div>
+        <p class="sub" id="todayTitle"></p>
+        <div class="chips" id="todayList"></div>
+        <div class="scroll d-only"><table id="sched"></table></div>
+        <div class="m-only"><div class="tabs" id="dayTabs"></div><ol class="dlist" id="dayList"></ol></div>
+      </section>
+    </div>
+    <footer class="foot" id="foot"></footer>
+  </main>
+
+  <main id="catatan" class="notes hidden">
+    <div class="wrap">
+      <div class="nt" id="nt">
+        <aside class="nlist card">
+          <div class="ch"><span class="ico" style="background:var(--sun)">📒</span><h2>Catatan</h2></div>
+          <div class="newrow">
+            <button type="button" class="btn mint" data-new="teks">+ Catatan</button>
+            <button type="button" class="btn" data-new="centang">+ Daftar</button>
+            <button type="button" class="btn pink" data-new="struktur">+ Struktur</button>
+          </div>
+          <ul class="nitems" id="nItems"></ul>
+        </aside>
+        <section class="neditor card" id="nEditor"></section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL NAMA LENGKAP -->
+<div id="vName" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="nameTitle">
+  <div class="modal">
+    <h2 id="nameTitle">Halo, teman baru!</h2>
+    <p id="nameDesc">Sebelum masuk kelas, isi nama lengkapmu dulu ya. Nama ini akan tampil di beranda.</p>
+    <label for="fullName">Nama lengkap</label>
+    <input id="fullName" type="text" autocomplete="name" maxlength="60" placeholder="Contoh: Budi Santoso">
+    <p id="nameErr" class="err" role="alert"></p>
+    <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+      <button id="saveName" class="btn" type="button">Simpan &amp; masuk</button>
+      <button id="cancelName" class="btn white hidden" type="button">Batal</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js" defer></script>
+<script src="js/utils.js" defer></script>
+<script src="js/sakura.js" defer></script>
+<script src="js/waktu.js" defer></script>
+<script src="js/auth.js" defer></script>
+<script src="js/home.js" defer></script>
+<script src="js/navigation.js" defer></script>
+<script src="js/notes.js" defer></script>
+<script src="js/protect.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>
