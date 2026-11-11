@@ -29,5 +29,5 @@ const DOKUMENTASI = [
   { foto: "assets/dokumentasi/contoh-1.svg", judul: "Lomba Agustusan", tanggal: "-", keterangan: "" },
   { foto: "assets/dokumentasi/contoh-2.svg", judul: "Lomba Agustusan", tanggal: "-", keterangan: "" },
   { foto: "assets/dokumentasi/contoh-3.svg", judul: "Lomba Agustusan", tanggal: "-", keterangan: "" },
-  { foto: "assets/dokumentasi/contoh-4.svg", judul: "Lomba Agustusan", tanggal: "-", keterangan: "" }
+  { foto: "assets/dokumentasi/contoh-4.svg", judul: "Lomba Agustusan", tanggal: "-", keterangan: "" },
 ];
