@@ -1,0 +1,318 @@
+/* css/sections.css
+   Pengumuman, tugas kelas, jadwal pelajaran, dan footer. */
+
+.ann {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.ann li {
+  border: 1.5px solid var(--edge);
+  border-radius: 16px;
+  padding: 10px 14px;
+  background: #fff0f5;
+}
+
+.ann b {
+  display: block;
+}
+
+.tasks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.tasks label {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 0;
+  border: 1.5px solid var(--edge);
+  border-radius: 16px;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: #f1faf3;
+}
+
+.tasks input {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--pink);
+  flex: none;
+}
+
+.tasks input:checked+span {
+  text-decoration: line-through;
+  opacity: .55;
+}
+
+.tasks small {
+  display: block;
+  font-weight: 700;
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  min-width: 560px;
+  border: 1.5px solid var(--edge);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1.5px solid var(--edge);
+  border-right: 1.5px solid var(--edge);
+}
+
+th {
+  background: var(--sky);
+  font-family: 'Shippori Mincho',serif;
+  letter-spacing: 1px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+th:last-child,
+td:last-child {
+  border-right: 0;
+}
+
+td.today,
+th.today {
+  background: var(--sun);
+}
+
+.bar {
+  height: 12px;
+  border: 1.5px solid var(--edge);
+  border-radius: 99px;
+  background: #fff;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--mint);
+  transition: width .5s;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  border: 1.5px solid var(--edge);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-weight: 800;
+  background: #ffe6ef;
+}
+
+.chip:nth-child(3n+2) {
+  background: #e3f3e8;
+}
+
+.chip:nth-child(3n) {
+  background: #fbd5e3;
+}
+
+.chip small {
+  font-weight: 700;
+  opacity: .65;
+  margin-right: 6px;
+}
+
+.foot {
+  text-align: center;
+  font-weight: 700;
+  padding: 4px 16px 28px;
+}
+
+.content {
+  background: linear-gradient(#fff1f6,#ffe6ef);
+}
+
+.cols {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: 1fr;
+}
+
+#jadwal {
+  margin-top: 22px;
+}
+
+.ch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ch h2 {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.ico {
+  width: 52px;
+  height: 52px;
+  flex: none;
+  border: var(--line);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+  box-shadow: 0 6px 18px rgba(214,80,127,.18);
+}
+
+.ann li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ann li:nth-child(2) {
+  background: #ffe6ef;
+}
+
+.ann li:nth-child(3) {
+  background: #fbd5e3;
+}
+
+.ai {
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+.sub {
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+
+.chips {
+  margin-bottom: 20px;
+}
+
+.d-only {
+  display: none;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 4px 14px;
+}
+
+.tabs button {
+  flex: none;
+  border: 1.5px solid var(--edge);
+  border-radius: 999px;
+  background: #fff;
+  padding: 6px 16px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.tabs button.on {
+  background: var(--pink);
+  box-shadow: 0 6px 18px rgba(214,80,127,.18);
+}
+
+.dlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.dlist li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1.5px solid var(--edge);
+  border-radius: 16px;
+  padding: 10px 14px;
+  background: #fff3f8;
+  font-weight: 800;
+}
+
+.dlist li:nth-child(even) {
+  background: #fff0f5;
+}
+
+.dlist b {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--edge);
+  background: var(--sun);
+  display: grid;
+  place-items: center;
+  font-family: 'Shippori Mincho',serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+@media (min-width: 760px) {
+  .d-only {
+    display: block;
+  }
+  .m-only {
+    display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .cols {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+  .content .wrap {
+    max-width: 1100px;
+    padding: 34px 24px 56px;
+  }
+}
+
+.ch h2 {
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.ico {
+  box-shadow: none;
+}
+
+th {
+  font-size: 1rem;
+}
+
+.dlist b {
+  font-size: 1rem;
+}

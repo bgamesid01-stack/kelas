@@ -1,0 +1,101 @@
+/* css/auth.css
+   Layar login dan kotak isi nama lengkap. */
+
+.login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.login .card {
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  transform: rotate(-1deg);
+}
+
+.login h1 {
+  font-size: 3.4rem;
+  line-height: 1;
+  color: var(--pink);
+  text-shadow: 0 6px 18px rgba(214,80,127,.18);
+}
+
+.login p {
+  margin: 10px 0 18px;
+}
+
+.mascot {
+  width: 130px;
+  height: 130px;
+  margin: -70px auto 6px;
+  display: block;
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+#gbtn {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+  margin: 14px 0 6px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(74,36,51,.72);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  z-index: 20;
+}
+
+.modal {
+  max-width: 440px;
+  width: 100%;
+  background: var(--paper);
+  border: var(--line);
+  border-radius: 26px;
+  box-shadow: 0 6px 18px rgba(214,80,127,.18);
+  padding: 24px;
+  animation: pop .35s cubic-bezier(.3,1.6,.5,1);
+}
+
+.modal h2 {
+  font-size: 2.2rem;
+  color: var(--pink);
+}
+
+@media (max-width: 720px) {
+  .login h1 {
+    font-size: 2.8rem;
+  }
+}
+
+.login {
+  position: relative;
+  overflow: hidden;
+}
+
+.login .card {
+  transform: none;
+  z-index: 3;
+}
+
+.login h1 {
+  font-size: 2.2rem;
+  line-height: 1.1;
+  color: #d9507f;
+  text-shadow: none;
+}
+
+.modal h2 {
+  font-size: 1.7rem;
+  color: #d9507f;
+}
+
+.mascot {
+  filter: drop-shadow(0 8px 12px rgba(214,80,127,.3));
+}

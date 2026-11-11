@@ -1,0 +1,67 @@
+/* css/variables.css
+   Variabel warna dan suasana waktu (pagi/siang/sore/malam). Ubah warna utama di sini. */
+
+:root {
+  --ink: #4a2433;
+  --edge: #f1b9cd;
+  --sky: #ffe3ee;
+  --sun: #fbc9da;
+  --pink: #ee7ea6;
+  --mint: #d3ead9;
+  --paper: #fffafc;
+  --shadow: 0 8px 24px rgba(214,80,127,.16);
+  --line: 1.5px solid var(--edge);
+}
+
+:root {
+  --s1: #8fd0ff;
+  --s2: #cdeeff;
+  --s3: #fff1f6;
+  --sunbg: radial-gradient(circle at 40% 35%,#fffbe0,#ffe680);
+  --sunring: rgba(255,255,255,.5);
+  --sunglow: rgba(255,240,150,.75);
+  --fuji: #a9c9e6;
+  --snow: #fff;
+  --hillb: #fbd0e0;
+  --h1: #4a2433;
+  --h2: #d9507f;
+  --h1sh: rgba(255,255,255,.9);
+}
+
+html[data-waktu="pagi"] {
+  --s1: #bfe3ff;
+  --s2: #ffd9e6;
+  --s3: #ffe9d6;
+  --sunbg: radial-gradient(circle at 40% 35%,#fff6c4,#ffcf6e);
+  --sunring: rgba(255,226,140,.45);
+  --sunglow: rgba(255,205,120,.65);
+  --fuji: #e9b9cf;
+  --hillb: #f9d3e1;
+}
+
+html[data-waktu="sore"] {
+  --s1: #ff9f9a;
+  --s2: #ffc6a1;
+  --s3: #ffe4d8;
+  --sunbg: radial-gradient(circle at 40% 35%,#ffc78a,#ff7a59);
+  --sunring: rgba(255,150,100,.4);
+  --sunglow: rgba(255,120,90,.6);
+  --fuji: #d98f9a;
+  --hillb: #f5b9c4;
+  --h2: #c93c6c;
+}
+
+html[data-waktu="malam"] {
+  --s1: #1d1b4b;
+  --s2: #3b2f72;
+  --s3: #8a6aa8;
+  --sunbg: radial-gradient(circle at 64% 36%,rgba(170,182,225,.6) 0 8%,transparent 9%),radial-gradient(circle at 34% 64%,rgba(170,182,225,.5) 0 11%,transparent 12%),radial-gradient(circle at 40% 30%,#fff,#dfe6ff);
+  --sunring: rgba(200,210,255,.22);
+  --sunglow: rgba(190,200,255,.5);
+  --fuji: #4b3d7a;
+  --snow: #e7e3ff;
+  --hillb: #8b6aa8;
+  --h1: #fff4f9;
+  --h2: #ffc2d9;
+  --h1sh: rgba(20,10,50,.65);
+}

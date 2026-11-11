@@ -1,0 +1,235 @@
+/* css/notes.css
+   Halaman Catatan. */
+
+.notes {
+  background: linear-gradient(#fff1f6,#ffe6ef);
+  min-height: calc(100svh - 68px);
+}
+
+.nt {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+}
+
+.neditor {
+  display: none;
+}
+
+.nt.editing .neditor {
+  display: block;
+}
+
+.nt.editing .nlist {
+  display: none;
+}
+
+.newrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.newrow .btn {
+  font-size: .95rem;
+  padding: 8px 16px;
+}
+
+.nitems {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.nitem {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  border: 1.5px solid var(--edge);
+  border-radius: 16px;
+  background: #fff3f8;
+  padding: 10px 12px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.nitem.on {
+  background: var(--sun);
+  box-shadow: 0 6px 18px rgba(214,80,127,.18);
+}
+
+.nitem small {
+  display: block;
+  font-weight: 700;
+  opacity: .65;
+}
+
+.ehead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.badge {
+  border: 1.5px solid var(--edge);
+  border-radius: 999px;
+  padding: 2px 14px;
+  font-weight: 800;
+  background: var(--sky);
+}
+
+.sv {
+  margin-left: auto;
+  font-weight: 700;
+  font-size: .9rem;
+}
+
+.ehead .btn {
+  font-size: .9rem;
+  padding: 6px 16px;
+}
+
+.etitle {
+  font-family: 'Shippori Mincho',serif;
+  font-size: 1.9rem!important;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.ebody {
+  width: 100%;
+  min-height: 340px;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.6;
+  padding: 14px;
+  border: var(--line);
+  border-radius: 16px;
+  background: #fffafc;
+  resize: vertical;
+}
+
+.crow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.crow input[type=checkbox] {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  accent-color: var(--pink);
+}
+
+.crow .ci,
+.nrow input {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  padding: 8px 12px;
+  border: 1.5px solid var(--edge);
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 700;
+  background: #fff;
+}
+
+.ci.done {
+  text-decoration: line-through;
+  opacity: .55;
+}
+
+.tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tree ul ul {
+  margin-left: 20px;
+  padding-left: 16px;
+  border-left: 2px dashed #e7a3bc;
+}
+
+.node {
+  margin: 8px 0;
+}
+
+.nrow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.nrow .d0 {
+  background: var(--sun);
+}
+
+.nrow .d1 {
+  background: #ffe6ef;
+}
+
+.nrow .d2 {
+  background: #fff;
+}
+
+.mini {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--edge);
+  border-radius: 12px;
+  background: var(--mint);
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.mini.del {
+  background: var(--pink);
+}
+
+.erow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.nempty {
+  text-align: center;
+  padding: 50px 10px;
+  font-weight: 700;
+}
+
+@media (min-width: 900px) {
+  .nt {
+    grid-template-columns: 320px 1fr;
+    align-items: start;
+  }
+  .nt .nlist,
+  .nt.editing .nlist,
+  .neditor,
+  .nt.editing .neditor {
+    display: block;
+  }
+  .back {
+    display: none;
+  }
+  .notes .wrap {
+    max-width: 1100px;
+    padding: 34px 24px 56px;
+  }
+}
+
+.etitle {
+  font-size: 1.4rem!important;
+  letter-spacing: 0;
+}
