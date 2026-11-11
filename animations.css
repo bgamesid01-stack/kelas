@@ -1,0 +1,52 @@
+/* css/animations.css
+   Keyframes animasi dan pengaturan "kurangi gerakan". */
+
+@keyframes bob {
+  50% {
+    transform: translateY(-8px) rotate(3deg);
+  }
+}
+
+@keyframes pop {
+  from {
+    transform: scale(.6) rotate(-6deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0,-5vh,0) rotate(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: .9;
+  }
+  90% {
+    opacity: .85;
+  }
+  100% {
+    transform: translate3d(var(--dx,60px),105vh,0) rotate(540deg);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none!important;
+    transition: none!important;
+  }
+}
