@@ -1,0 +1,10 @@
+# Daftar akun kelas.
+# Satu baris = satu akun, formatnya:  username:garam:hash
+# Baris yang diawali tanda # diabaikan. Hapus satu baris untuk mencabut akun itu.
+# Isi file ini bersifat publik: jangan menaruh nama lengkap atau kata sandi di sini.
+#
+# AKUN CONTOH untuk uji coba (username: contoh, kata sandi: contoh123).
+# Hapus baris di bawah ini sebelum web dipakai sungguhan.
+contoh:57421656103f1133d987e0f8cf20f2c5:5aa2d368b958ea99e1102c4a8aee36f91b42f3776f4bc5bde7e15c1ad3ac87d4
+
+# Tempel kode akun siswa di bawah ini, satu baris per akun:
