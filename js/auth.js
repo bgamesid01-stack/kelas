@@ -1,5 +1,5 @@
 /* js/auth.js
-   Alur masuk: daftar akun, login (username dan kata sandi), dan pengisian nama lengkap. */
+   Alur masuk: login dari daftar akun (data/daftar-akun.txt), pembuatan kode akun, dan nama lengkap. */
 
 /* ---- ALUR UTAMA ---- */
 function route(){
@@ -17,23 +17,40 @@ function onLogin(user){
 }
 
 /* ---- LOGIN DAN DAFTAR ---- */
-// Catatan: web ini tidak punya server, jadi akun hanya tersimpan di peramban perangkat ini.
-// Kata sandi tidak pernah disimpan apa adanya, hanya hasil PBKDF2 (150.000 putaran) + garam acak.
-const USERS_KEY = "kelas_users";
-let users = store.get(USERS_KEY, {});      // { username: { nama, salt, hash, dibuat } }
+// Daftar akun dibaca dari file data/daftar-akun.txt di repo, jadi akun yang sama bisa dipakai dari perangkat mana pun.
+// Isi file hanya username + garam + hash (PBKDF2), bukan kata sandi dan bukan nama lengkap.
+// Siswa membuat "kode akun" di tab Daftar, mengirimnya ke admin, lalu admin menempelkannya ke file itu.
+const FILE_AKUN = "data/daftar-akun.txt";
+const reUser = /^[a-z0-9][a-z0-9._]{2,19}$/;
+const reBaris = /^([a-z0-9][a-z0-9._]{2,19}):([0-9a-f]{32}):([0-9a-f]{64})$/;
+let akunDaftar = null, akunWaktu = 0;
 const gagalMasuk = {};                     // penghitung percobaan salah per username
 const punya = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 const normUser = s => s.trim().toLowerCase();
-const reUser = /^[a-z0-9][a-z0-9._]{2,19}$/;
 
 const toHex = b => [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
 const fromHex = h => new Uint8Array(h.match(/../g).map(x => parseInt(x, 16)));
 const acakHex = n => toHex(crypto.getRandomValues(new Uint8Array(n)));
 
+// Kata sandi tidak pernah disimpan apa adanya: hanya hasil PBKDF2 (150.000 putaran) + garam acak.
 async function hashSandi(sandi, saltHex){
   const kunci = await crypto.subtle.importKey("raw", new TextEncoder().encode(sandi), "PBKDF2", false, ["deriveBits"]);
   const bits = await crypto.subtle.deriveBits({ name:"PBKDF2", salt: fromHex(saltHex), iterations: 150000, hash:"SHA-256" }, kunci, 256);
   return toHex(bits);
+}
+
+// Membaca daftar akun. Parameter ?t= memaksa peramban mengambil versi terbaru dari server.
+async function muatAkun(paksa){
+  if(!paksa && akunDaftar && Date.now() - akunWaktu < 20000) return akunDaftar;
+  const r = await fetch(FILE_AKUN + "?t=" + Date.now(), { cache: "no-store" });
+  if(!r.ok) throw new Error("HTTP " + r.status);
+  const peta = {};
+  (await r.text()).split(/\r?\n/).forEach(baris => {
+    const m = reBaris.exec(baris.trim());
+    if(m) peta[m[1]] = { salt: m[2], hash: m[3] };
+  });
+  akunDaftar = peta; akunWaktu = Date.now();
+  return peta;
 }
 
 function pesan(id, teks){ const e = $(id); e.textContent = teks || ""; e.classList.toggle("show", !!teks) }
@@ -51,10 +68,11 @@ function setTab(t){
   $("tabDaftar").setAttribute("aria-selected", String(!masuk));
   $("formMasuk").classList.toggle("hidden", !masuk);
   $("formDaftar").classList.toggle("hidden", masuk);
-  $("authTitle").textContent = masuk ? "Selamat Datang" : "Buat Akun Baru";
-  $("authSub").textContent = masuk ? "Masuk dengan akun kelasmu untuk melanjutkan." : "Isi data berikut untuk mulai memakai web kelas.";
+  $("hasilDaftar").classList.add("hidden");
+  $("authTitle").textContent = masuk ? "Selamat Datang" : "Buat Kode Akun";
+  $("authSub").textContent = masuk ? "Masuk dengan akun kelasmu untuk melanjutkan." : "Pilih username dan kata sandi. Kodenya dikirim ke admin kelas untuk diaktifkan.";
   pesan("msgMasuk"); pesan("msgDaftar");
-  if(matchMedia("(hover:hover)").matches) setTimeout(() => $(masuk ? "lUser" : "dNama").focus(), 60);
+  if(matchMedia("(hover:hover)").matches) setTimeout(() => $(masuk ? "lUser" : "dUser").focus(), 60);
 }
 $("tabMasuk").onclick = () => setTab("masuk");
 $("tabDaftar").onclick = () => setTab("daftar");
@@ -79,7 +97,7 @@ $("dPass").addEventListener("input", () => {
   $("meter").dataset.s = s;
   $("meterTxt").textContent = s ? "Kekuatan: " + ["", "Lemah", "Cukup", "Kuat", "Sangat kuat"][s] : "Minimal 6 karakter.";
 });
-["lUser","lPass","dNama","dUser","dPass","dPass2"].forEach(id => $(id).addEventListener("input", () => tandai(id, false)));
+["lUser","lPass","dUser","dPass","dPass2"].forEach(id => $(id).addEventListener("input", () => tandai(id, false)));
 
 // Pembatasan percobaan: 5 kali salah, kunci 30 detik
 const sisaKunci = u => { const g = gagalMasuk[u]; return g && g.sampai > Date.now() ? Math.ceil((g.sampai - Date.now()) / 1000) : 0 };
@@ -94,15 +112,16 @@ async function berhasil(u, btn){
   await tunggu(750);
   $("authShell").classList.add("out");
   await tunggu(450);
-  const nama = (punya(profiles, u) && profiles[u].fullName) || users[u].nama;
-  onLogin({ sub: u, email: "@" + u, picture: "", gname: nama });
+  const nama = (punya(profiles, u) && profiles[u].fullName) || "";
+  onLogin({ sub: u, email: "@" + u, picture: "", gname: nama });   // nama kosong -> kotak isi nama lengkap muncul
   // kembalikan formulir ke keadaan awal untuk login berikutnya
   $("authShell").classList.remove("out"); btn.classList.remove("done"); btn.disabled = false;
-  ["lUser","lPass","dNama","dUser","dPass","dPass2"].forEach(id => $(id).value = "");
+  ["lUser","lPass","dUser","dPass","dPass2"].forEach(id => $(id).value = "");
   $("dPass").dispatchEvent(new Event("input"));
   setTab("masuk");
 }
 const gagalFitur = "Peramban ini tidak mendukung fitur keamanan yang dibutuhkan. Buka lewat alamat https dengan Chrome atau Firefox terbaru.";
+const gagalMuat = "Daftar akun belum bisa dimuat. Periksa koneksi internetmu lalu coba lagi.";
 
 $("formMasuk").addEventListener("submit", async e => {
   e.preventDefault();
@@ -113,7 +132,12 @@ $("formMasuk").addEventListener("submit", async e => {
   if(sisa) return pesan("msgMasuk", `Terlalu banyak percobaan. Coba lagi dalam ${sisa} detik.`);
   sibuk(btn, true);
   try{
-    const akun = punya(users, u) ? users[u] : null;
+    let akun;
+    try{
+      let daftar = await muatAkun();
+      akun = punya(daftar, u) ? daftar[u] : null;
+      if(!akun){ daftar = await muatAkun(true); akun = punya(daftar, u) ? daftar[u] : null }   // mungkin admin baru menambahkan
+    }catch(err){ pesan("msgMasuk", gagalMuat); sibuk(btn, false); return }
     const h = await hashSandi(p, akun ? akun.salt : "00".repeat(16));   // waktu proses disamakan
     if(!akun || h !== akun.hash){
       catatGagal(u); tandai("lUser", true); tandai("lPass", true);
@@ -124,28 +148,44 @@ $("formMasuk").addEventListener("submit", async e => {
   }catch(err){ pesan("msgMasuk", gagalFitur); sibuk(btn, false) }
 });
 
+// Tab Daftar: membuat kode akun (username:garam:hash) untuk dikirim ke admin
 $("formDaftar").addEventListener("submit", async e => {
   e.preventDefault();
-  const nama = cleanName($("dNama").value), u = normUser($("dUser").value), p = $("dPass").value, p2 = $("dPass2").value, btn = $("btnDaftar");
+  const u = normUser($("dUser").value), p = $("dPass").value, p2 = $("dPass2").value, btn = $("btnDaftar");
   pesan("msgDaftar");
   const salah = (id, teks) => { tandai(id, true); pesan("msgDaftar", teks); $(id).focus() };
-  const en = validName(nama);
-  if(en) return salah("dNama", en);
   if(!reUser.test(u)) return salah("dUser", "Username 3 sampai 20 karakter: huruf kecil, angka, titik, atau garis bawah, dan diawali huruf atau angka.");
-  if(punya(users, u)) return salah("dUser", "Username ini sudah dipakai. Coba username lain.");
   if(p.length < 6) return salah("dPass", "Kata sandi minimal 6 karakter.");
   if(p !== p2) return salah("dPass2", "Kata sandi dan pengulangannya belum sama.");
   sibuk(btn, true);
   try{
+    try{ if(punya(await muatAkun(true), u)){ sibuk(btn, false); return salah("dUser", "Username ini sudah terdaftar. Coba username lain.") } }
+    catch(err){ /* daftar tidak terbaca: lanjutkan, admin yang akan memeriksa */ }
     const salt = acakHex(16);
-    users[u] = { nama, salt, hash: await hashSandi(p, salt), dibuat: Date.now() };
-    store.set(USERS_KEY, users);
-    profiles[u] = { fullName: nama };
-    store.set("kelas_profiles", profiles);
-    toast("Akun berhasil dibuat");
-    await berhasil(u, btn);
-  }catch(err){ pesan("msgDaftar", gagalFitur); sibuk(btn, false) }
+    tampilKode(`${u}:${salt}:${await hashSandi(p, salt)}`, u);
+  }catch(err){ pesan("msgDaftar", gagalFitur) }
+  sibuk(btn, false);
 });
+
+function tampilKode(baris, u){
+  $("kodeBox").value = baris;
+  const wa = typeof NOMOR_ADMIN === "string" ? NOMOR_ADMIN.replace(/\D/g, "") : "";
+  $("kodeWa").classList.toggle("hidden", !wa);
+  if(wa) $("kodeWa").href = "https://wa.me/" + wa + "?text=" + encodeURIComponent(`Halo, ini kode akun kelas saya (username: ${u}):\n${baris}`);
+  $("formDaftar").classList.add("hidden"); $("hasilDaftar").classList.remove("hidden");
+  $("authTitle").textContent = "Kode Akun Siap";
+  $("authSub").textContent = "Kirim kode ini ke admin kelas agar akunmu diaktifkan.";
+}
+$("kodeSalin").onclick = async () => {
+  try{ await navigator.clipboard.writeText($("kodeBox").value) }
+  catch(err){ $("kodeBox").select(); document.execCommand("copy") }
+  toast("Kode disalin");
+};
+$("kodeLagi").onclick = () => {
+  ["dUser","dPass","dPass2"].forEach(id => $(id).value = "");
+  $("dPass").dispatchEvent(new Event("input"));
+  setTab("daftar");
+};
 
 /* ---- NAMA LENGKAP ---- */
 function openNameModal(isEdit){
