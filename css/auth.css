@@ -1,101 +1,486 @@
 /* css/auth.css
-   Layar login dan kotak isi nama lengkap. */
+   Layar masuk/daftar dan kotak isi nama lengkap. */
 
+/* ===== Layar masuk dan daftar ===== */
 .login {
-  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
   display: grid;
   place-items: center;
-  padding: 16px;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 76px 16px 28px;
 }
 
-.login .card {
-  max-width: 440px;
-  width: 100%;
-  text-align: center;
+.auth-shell {
   position: relative;
-  transform: rotate(-1deg);
+  z-index: 3;
+  width: 100%;
+  max-width: 440px;
+  transition: opacity .45s ease, transform .45s ease;
 }
 
-.login h1 {
-  font-size: 3.4rem;
-  line-height: 1;
-  color: var(--pink);
-  text-shadow: 0 6px 18px rgba(214,80,127,.18);
+.auth-shell.out {
+  opacity: 0;
+  transform: translateY(-14px) scale(.98);
 }
 
-.login p {
-  margin: 10px 0 18px;
+.auth-art {
+  display: none;
+}
+
+.auth-card {
+  position: relative;
+  padding: 58px 22px 22px;
+  background: #ffffff;
+  border: 1px solid #e6e9f0;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(27,42,74,.16), 0 4px 14px rgba(27,42,74,.08);
+  animation: rise .7s cubic-bezier(.2,.8,.2,1) both;
 }
 
 .mascot {
-  width: 130px;
-  height: 130px;
-  margin: -70px auto 6px;
+  position: absolute;
+  top: -52px;
+  left: 50%;
+  width: 104px;
+  height: 104px;
+  margin-left: -52px;
+}
+
+.mascot svg {
+  width: 100%;
+  height: 100%;
+  animation: spin 80s linear infinite;
+  filter: drop-shadow(0 8px 14px rgba(214,80,127,.35));
+}
+
+.auth-card h2 {
+  font-size: 1.7rem;
+  line-height: 1.2;
+  text-align: center;
+  color: #1b2a4a;
+}
+
+.auth-sub {
+  margin: 6px 0 0;
+  text-align: center;
+  color: #5b6479;
+  font-size: .95rem;
+}
+
+/* Tab Masuk / Daftar */
+.auth-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 20px 0;
+  padding: 4px;
+  background: #f1f3f8;
+  border-radius: 12px;
+}
+
+.auth-tabs button {
+  position: relative;
+  z-index: 1;
+  padding: 10px;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: #5b6479;
+  font-weight: 800;
+  transition: color .25s;
+}
+
+.auth-tabs button[aria-selected="true"] {
+  color: #1b2a4a;
+}
+
+.tab-ind {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  background: #ffffff;
+  border-radius: 9px;
+  box-shadow: 0 2px 8px rgba(27,42,74,.14);
+  transition: transform .35s cubic-bezier(.3,1.3,.5,1);
+}
+
+#authBox[data-tab="daftar"] .tab-ind {
+  transform: translateX(100%);
+}
+
+/* Formulir */
+.auth-form {
+  display: grid;
+  gap: 14px;
+  animation: formIn .4s ease both;
+}
+
+.fld label {
   display: block;
-  animation: bob 2.4s ease-in-out infinite;
+  margin: 0 0 6px;
+  color: #1b2a4a;
+  font-size: .88rem;
+  font-weight: 800;
 }
 
-#gbtn {
+.inp {
   display: flex;
-  justify-content: center;
-  min-height: 44px;
-  margin: 14px 0 6px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px 0 12px;
+  background: #ffffff;
+  border: 1.5px solid #d8dce6;
+  border-radius: 12px;
+  color: #7a8296;
+  transition: border-color .2s, box-shadow .2s, color .2s;
 }
 
+.inp:focus-within {
+  border-color: #7b1e3a;
+  box-shadow: 0 0 0 4px rgba(123,30,58,.12);
+  color: #7b1e3a;
+}
+
+.inp.bad {
+  border-color: #c4004f;
+  animation: shake .4s;
+}
+
+.inp svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.auth-card .inp input {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+  padding: 13px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #1b2a4a;
+  font: inherit;
+  font-weight: 700;
+  outline: none;
+}
+
+.eye {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: #7a8296;
+}
+
+.eye:hover {
+  color: #1b2a4a;
+}
+
+.eye .slash {
+  display: none;
+}
+
+.eye.on .slash {
+  display: inline;
+}
+
+/* Indikator kekuatan kata sandi */
+.meter {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.meter i {
+  height: 5px;
+  border-radius: 5px;
+  background: #e3e7ef;
+  transition: background .3s;
+}
+
+.meter[data-s="1"] i:nth-child(-n+1) { background: #d64545; }
+.meter[data-s="2"] i:nth-child(-n+2) { background: #e8a13a; }
+.meter[data-s="3"] i:nth-child(-n+3) { background: #5fae6e; }
+.meter[data-s="4"] i:nth-child(-n+4) { background: #2f8f5b; }
+
+.fld small {
+  display: block;
+  margin-top: 6px;
+  color: #5b6479;
+  font-size: .8rem;
+}
+
+.auth-msg {
+  max-height: 0;
+  margin: 0;
+  overflow: hidden;
+  opacity: 0;
+  color: #b3224f;
+  font-size: .88rem;
+  font-weight: 700;
+  transition: max-height .3s, opacity .3s;
+}
+
+.auth-msg.show {
+  max-height: 70px;
+  opacity: 1;
+}
+
+/* Tombol utama: muat, berhasil */
+.auth-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 48px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1b2a4a, #2b3f6e);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: .3px;
+  box-shadow: 0 8px 20px rgba(27,42,74,.28);
+  transition: transform .15s, box-shadow .2s, background .3s;
+}
+
+.auth-btn:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #7b1e3a, #a02a52);
+  box-shadow: 0 12px 26px rgba(27,42,74,.34);
+}
+
+.auth-btn:active {
+  transform: translateY(1px);
+}
+
+.auth-btn:disabled {
+  cursor: wait;
+}
+
+.auth-btn .lbl,
+.auth-btn .spin,
+.auth-btn .ok {
+  grid-area: 1 / 1;
+  transition: opacity .2s;
+}
+
+.auth-btn .spin {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  opacity: 0;
+  animation: spin .7s linear infinite;
+}
+
+.auth-btn .ok {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  opacity: 0;
+}
+
+.auth-btn.busy .lbl { opacity: 0; }
+.auth-btn.busy .spin { opacity: 1; }
+
+.auth-btn.done {
+  background: #2f8f5b;
+  box-shadow: 0 8px 20px rgba(47,143,91,.35);
+}
+
+.auth-btn.done .lbl,
+.auth-btn.done .spin { opacity: 0; }
+
+.auth-btn.done .ok {
+  opacity: 1;
+  animation: draw .5s ease forwards;
+}
+
+.auth-note {
+  margin: 18px 0 0;
+  color: #7a8296;
+  font-size: .78rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+@keyframes formIn {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes shake {
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ===== Desktop: dua panel ===== */
+@media (min-width: 900px) {
+  .login {
+    padding: 32px;
+  }
+
+  .auth-shell {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 920px;
+    overflow: hidden;
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 30px 80px rgba(27,42,74,.25);
+  }
+
+  .auth-card {
+    padding: 48px 44px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    animation: none;
+  }
+
+  .mascot {
+    display: none;
+  }
+
+  .auth-art {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    padding: 48px 44px;
+    overflow: hidden;
+    color: #ffffff;
+    background: linear-gradient(160deg, #1b2a4a 0%, #2d3e6b 55%, #7b1e3a 130%);
+  }
+
+  .auth-art::before,
+  .auth-art::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(247,168,196,.18);
+    filter: blur(2px);
+  }
+
+  .auth-art::before {
+    top: -90px;
+    right: -70px;
+    width: 260px;
+    height: 260px;
+  }
+
+  .auth-art::after {
+    bottom: -110px;
+    left: -60px;
+    width: 300px;
+    height: 300px;
+  }
+
+  .auth-art > * {
+    position: relative;
+    z-index: 1;
+    animation: rise .8s cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  .auth-art > :nth-child(2) { animation-delay: .1s; }
+  .auth-art > :nth-child(3) { animation-delay: .2s; }
+  .auth-art > :nth-child(4) { animation-delay: .3s; }
+
+  .auth-flower {
+    width: 132px;
+    height: 132px;
+    animation: spin 70s linear infinite;
+    filter: drop-shadow(0 10px 24px rgba(0,0,0,.35));
+  }
+
+  .auth-art h1 {
+    font-size: 2.6rem;
+    line-height: 1.1;
+    color: #ffffff;
+  }
+
+  .auth-art p {
+    margin: 0;
+    color: rgba(255,255,255,.85);
+    font-size: 1.05rem;
+  }
+
+  .auth-art ul {
+    display: grid;
+    gap: 10px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .auth-art li {
+    position: relative;
+    padding-left: 30px;
+    color: rgba(255,255,255,.9);
+    font-weight: 600;
+  }
+
+  .auth-art li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .15em;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.16) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 12px no-repeat;
+  }
+}
+
+/* ===== Kotak isi nama lengkap (ubah nama) ===== */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(74,36,51,.72);
+  z-index: 20;
   display: grid;
   place-items: center;
   padding: 16px;
-  z-index: 20;
+  background: rgba(74,36,51,.72);
 }
 
 .modal {
-  max-width: 440px;
   width: 100%;
+  max-width: 440px;
+  padding: 24px;
   background: var(--paper);
   border: var(--line);
   border-radius: 26px;
   box-shadow: 0 6px 18px rgba(214,80,127,.18);
-  padding: 24px;
   animation: pop .35s cubic-bezier(.3,1.6,.5,1);
-}
-
-.modal h2 {
-  font-size: 2.2rem;
-  color: var(--pink);
-}
-
-@media (max-width: 720px) {
-  .login h1 {
-    font-size: 2.8rem;
-  }
-}
-
-.login {
-  position: relative;
-  overflow: hidden;
-}
-
-.login .card {
-  transform: none;
-  z-index: 3;
-}
-
-.login h1 {
-  font-size: 2.2rem;
-  line-height: 1.1;
-  color: #d9507f;
-  text-shadow: none;
 }
 
 .modal h2 {
   font-size: 1.7rem;
   color: #d9507f;
-}
-
-.mascot {
-  filter: drop-shadow(0 8px 12px rgba(214,80,127,.3));
 }
