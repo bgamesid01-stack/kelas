@@ -7,7 +7,7 @@ const GOOGLE_CLIENT_ID = "";
 
 const NAMA_KELAS = "Kelas XII AK 1";
 const JADWAL = {
-  Senin:  ["-", "-", "-", "-", "-"],
+  Senin:  ["KKA 1", "B. Jepang", "MP AK", "B. Inggris", "-"],
   Selasa: ["-", "-", "-", "-", "-"],
   Rabu:   ["-", "-", "-", "-", "-"],
   Kamis:  ["-", "-", "-", "-", "-"],
