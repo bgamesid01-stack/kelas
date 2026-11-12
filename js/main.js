@@ -3,5 +3,4 @@
 
 document.title = NAMA_KELAS + " | Kelas Ceria";
 renderDokumentasi();
-initGoogle();
 route();
