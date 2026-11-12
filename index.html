@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="css/navbar.css">
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/dokumentasi.css">
   <link rel="stylesheet" href="css/notes.css">
   <link rel="stylesheet" href="css/protect.css">
 </head>
@@ -45,6 +46,7 @@
       <nav class="nav-links">
         <a href="#pengumuman" data-go="pengumuman">Pengumuman</a>
         <a href="#tugas" data-go="tugas">Tugas kelas</a>
+        <a href="#dokumentasi" data-go="dokumentasi">Dokumentasi</a>
         <a href="#jadwal" data-go="jadwal">Jadwal</a>
         <a href="#catatan" data-go="catatan">Catatan</a>
       </nav>
@@ -62,6 +64,7 @@
       <a href="#beranda" data-go="beranda" class="on">Beranda</a>
       <a href="#pengumuman" data-go="pengumuman">Pengumuman</a>
       <a href="#tugas" data-go="tugas">Tugas kelas</a>
+      <a href="#dokumentasi" data-go="dokumentasi">Dokumentasi</a>
       <a href="#jadwal" data-go="jadwal">Jadwal</a>
       <a href="#catatan" data-go="catatan">Catatan</a>
     </nav>
@@ -99,6 +102,11 @@
           <ul class="tasks" id="tasks"></ul>
         </section>
       </div>
+      <section class="card" id="dokumentasi">
+        <div class="ch"><span class="ico" style="background:var(--sun)">📸</span><h2>Dokumentasi</h2></div>
+        <p class="sub">Foto kegiatan kelas. Ketuk foto untuk memperbesar.</p>
+        <div class="dk-grid" id="dkGrid"></div>
+      </section>
       <section class="card" id="jadwal">
         <div class="ch"><span class="ico" style="background:var(--sky)">🗓️</span><h2>Jadwal pelajaran</h2></div>
         <p class="sub" id="todayTitle"></p>
@@ -143,12 +151,19 @@
   </div>
 </div>
 
+<div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true" aria-label="Foto dokumentasi">
+  <button type="button" class="lb-x" id="lbClose" aria-label="Tutup">&#10005;</button>
+  <button type="button" class="lb-nav lb-prev" id="lbPrev" aria-label="Foto sebelumnya">&#8249;</button>
+  <figure class="lb-fig"><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button type="button" class="lb-nav lb-next" id="lbNext" aria-label="Foto berikutnya">&#8250;</button>
+</div>
 <script src="js/config.js" defer></script>
 <script src="js/utils.js" defer></script>
 <script src="js/sakura.js" defer></script>
 <script src="js/waktu.js" defer></script>
 <script src="js/auth.js" defer></script>
 <script src="js/home.js" defer></script>
+<script src="js/dokumentasi.js" defer></script>
 <script src="js/navigation.js" defer></script>
 <script src="js/notes.js" defer></script>
 <script src="js/protect.js" defer></script>
