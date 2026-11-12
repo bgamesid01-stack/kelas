@@ -14,6 +14,7 @@ function renderHome(){
   if(!session) return;
   const name = profiles[session.sub]?.fullName || "", now = new Date(), jam = now.getHours();
   paintAvatar($("drAvatar"), name);
+     paintAvatar($("akunBtn"), name);
   $("drName").textContent = name; $("drMail").textContent = session.email || "";
   $("foot").textContent = "© " + now.getFullYear() + " Kelas Ceria. Dibuat dengan semangat untuk " + NAMA_KELAS + ".";
 
