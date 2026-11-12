@@ -24,6 +24,7 @@ function setMenu(open){
   if(open) $("closeMenu").focus();
 }
 menuBtn.onclick = () => setMenu(true);
+$("akunBtn").onclick = () => setMenu(true);
 $("closeMenu").onclick = () => setMenu(false);
 scrim.onclick = () => setMenu(false);
 document.querySelectorAll("[data-go]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); setMenu(false); go(a.dataset.go) }));
