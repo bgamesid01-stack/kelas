@@ -1,5 +1,5 @@
 /* js/auth.js
-   Alur masuk: login dari daftar akun (data/daftar-akun.txt), pembuatan kode akun, dan nama lengkap. */
+   Alur masuk: login (dari file daftar akun atau server akun), pendaftaran, dan nama lengkap. */
 
 /* ---- ALUR UTAMA ---- */
 function route(){
@@ -28,6 +28,21 @@ const gagalMasuk = {};                     // penghitung percobaan salah per use
 const punya = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 const normUser = s => s.trim().toLowerCase();
 
+// Dua mode akun:
+// - Mode file (bawaan): akun dibaca dari data/daftar-akun.txt dan siswa mengirim "kode akun" ke admin.
+// - Mode server (opsional): kalau URL_SERVER_AKUN diisi di config.js, akun disimpan di server kecil
+//   (lihat server/worker.js) sehingga akun baru langsung aktif tanpa menunggu admin.
+const SERVER = typeof URL_SERVER_AKUN === "string" ? URL_SERVER_AKUN.trim().replace(/\/+$/, "") : "";
+class GalatJaringan extends Error {}
+async function panggil(jalur, kirim){
+  let r;
+  try{
+    r = await fetch(SERVER + jalur, kirim ? { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(kirim) } : undefined);
+  }catch(err){ throw new GalatJaringan() }
+  let d = {}; try{ d = await r.json() }catch(err){}
+  return { ...d, status: r.status };
+}
+
 const toHex = b => [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
 const fromHex = h => new Uint8Array(h.match(/../g).map(x => parseInt(x, 16)));
 const acakHex = n => toHex(crypto.getRandomValues(new Uint8Array(n)));
@@ -42,8 +57,9 @@ async function hashSandi(sandi, saltHex){
 // Membaca daftar akun. Parameter ?t= memaksa peramban mengambil versi terbaru dari server.
 async function muatAkun(paksa){
   if(!paksa && akunDaftar && Date.now() - akunWaktu < 20000) return akunDaftar;
-  const r = await fetch(FILE_AKUN + "?t=" + Date.now(), { cache: "no-store" });
-  if(!r.ok) throw new Error("HTTP " + r.status);
+  let r;
+  try{ r = await fetch(FILE_AKUN + "?t=" + Date.now(), { cache: "no-store" }) }catch(err){ throw new GalatJaringan() }
+  if(!r.ok) throw new GalatJaringan();
   const peta = {};
   (await r.text()).split(/\r?\n/).forEach(baris => {
     const m = reBaris.exec(baris.trim());
@@ -69,8 +85,8 @@ function setTab(t){
   $("formMasuk").classList.toggle("hidden", !masuk);
   $("formDaftar").classList.toggle("hidden", masuk);
   $("hasilDaftar").classList.add("hidden");
-  $("authTitle").textContent = masuk ? "Selamat Datang" : "Buat Kode Akun";
-  $("authSub").textContent = masuk ? "Masuk dengan akun kelasmu untuk melanjutkan." : "Pilih username dan kata sandi. Kodenya dikirim ke admin kelas untuk diaktifkan.";
+  $("authTitle").textContent = masuk ? "Selamat Datang" : (SERVER ? "Buat Akun Baru" : "Buat Kode Akun");
+  $("authSub").textContent = masuk ? "Masuk dengan akun kelasmu untuk melanjutkan." : (SERVER ? "Isi data berikut, akunmu langsung aktif." : "Pilih username dan kata sandi. Kodenya dikirim ke admin kelas untuk diaktifkan.");
   pesan("msgMasuk"); pesan("msgDaftar");
   if(matchMedia("(hover:hover)").matches) setTimeout(() => $(masuk ? "lUser" : "dUser").focus(), 60);
 }
@@ -97,7 +113,7 @@ $("dPass").addEventListener("input", () => {
   $("meter").dataset.s = s;
   $("meterTxt").textContent = s ? "Kekuatan: " + ["", "Lemah", "Cukup", "Kuat", "Sangat kuat"][s] : "Minimal 6 karakter.";
 });
-["lUser","lPass","dUser","dPass","dPass2"].forEach(id => $(id).addEventListener("input", () => tandai(id, false)));
+["lUser","lPass","dKode","dUser","dPass","dPass2"].forEach(id => $(id).addEventListener("input", () => tandai(id, false)));
 
 // Pembatasan percobaan: 5 kali salah, kunci 30 detik
 const sisaKunci = u => { const g = gagalMasuk[u]; return g && g.sampai > Date.now() ? Math.ceil((g.sampai - Date.now()) / 1000) : 0 };
@@ -116,12 +132,29 @@ async function berhasil(u, btn){
   onLogin({ sub: u, email: "@" + u, picture: "", gname: nama });   // nama kosong -> kotak isi nama lengkap muncul
   // kembalikan formulir ke keadaan awal untuk login berikutnya
   $("authShell").classList.remove("out"); btn.classList.remove("done"); btn.disabled = false;
-  ["lUser","lPass","dUser","dPass","dPass2"].forEach(id => $(id).value = "");
+  ["lUser","lPass","dKode","dUser","dPass","dPass2"].forEach(id => $(id).value = "");
   $("dPass").dispatchEvent(new Event("input"));
   setTab("masuk");
 }
 const gagalFitur = "Peramban ini tidak mendukung fitur keamanan yang dibutuhkan. Buka lewat alamat https dengan Chrome atau Firefox terbaru.";
-const gagalMuat = "Daftar akun belum bisa dimuat. Periksa koneksi internetmu lalu coba lagi.";
+const gagalMuat = "Server akun belum bisa dihubungi. Periksa koneksi internetmu lalu coba lagi.";
+
+// Memeriksa username dan kata sandi. Hasilnya { ok } atau { galat: "pesan" }.
+async function verifikasi(u, p){
+  if(SERVER){
+    const g = await panggil("/garam?u=" + encodeURIComponent(u));
+    const h = await hashSandi(p, g.ok ? g.salt : "00".repeat(16));   // waktu proses disamakan
+    if(!g.ok) return { ok:false };
+    const m = await panggil("/masuk", { u, hash: h });
+    if(m.status === 429) return { galat: m.pesan || "Terlalu banyak percobaan. Coba lagi beberapa menit lagi." };
+    return { ok: !!m.ok };
+  }
+  let daftar = await muatAkun();
+  let akun = punya(daftar, u) ? daftar[u] : null;
+  if(!akun){ daftar = await muatAkun(true); akun = punya(daftar, u) ? daftar[u] : null }   // mungkin admin baru menambahkan
+  const h = await hashSandi(p, akun ? akun.salt : "00".repeat(16));
+  return { ok: !!akun && h === akun.hash };
+}
 
 $("formMasuk").addEventListener("submit", async e => {
   e.preventDefault();
@@ -131,39 +164,45 @@ $("formMasuk").addEventListener("submit", async e => {
   const sisa = sisaKunci(u);
   if(sisa) return pesan("msgMasuk", `Terlalu banyak percobaan. Coba lagi dalam ${sisa} detik.`);
   sibuk(btn, true);
-  try{
-    let akun;
-    try{
-      let daftar = await muatAkun();
-      akun = punya(daftar, u) ? daftar[u] : null;
-      if(!akun){ daftar = await muatAkun(true); akun = punya(daftar, u) ? daftar[u] : null }   // mungkin admin baru menambahkan
-    }catch(err){ pesan("msgMasuk", gagalMuat); sibuk(btn, false); return }
-    const h = await hashSandi(p, akun ? akun.salt : "00".repeat(16));   // waktu proses disamakan
-    if(!akun || h !== akun.hash){
-      catatGagal(u); tandai("lUser", true); tandai("lPass", true);
-      pesan("msgMasuk", "Username atau kata sandi salah."); sibuk(btn, false); return;
-    }
-    delete gagalMasuk[u];
-    await berhasil(u, btn);
-  }catch(err){ pesan("msgMasuk", gagalFitur); sibuk(btn, false) }
+  let hasil;
+  try{ hasil = await verifikasi(u, p) }
+  catch(err){ pesan("msgMasuk", err instanceof GalatJaringan ? gagalMuat : gagalFitur); sibuk(btn, false); return }
+  if(hasil.galat){ pesan("msgMasuk", hasil.galat); sibuk(btn, false); return }
+  if(!hasil.ok){
+    catatGagal(u); tandai("lUser", true); tandai("lPass", true);
+    pesan("msgMasuk", "Username atau kata sandi salah."); sibuk(btn, false); return;
+  }
+  delete gagalMasuk[u];
+  await berhasil(u, btn);
 });
 
 // Tab Daftar: membuat kode akun (username:garam:hash) untuk dikirim ke admin
 $("formDaftar").addEventListener("submit", async e => {
   e.preventDefault();
-  const u = normUser($("dUser").value), p = $("dPass").value, p2 = $("dPass2").value, btn = $("btnDaftar");
+  const u = normUser($("dUser").value), p = $("dPass").value, p2 = $("dPass2").value, kode = $("dKode").value.trim(), btn = $("btnDaftar");
   pesan("msgDaftar");
   const salah = (id, teks) => { tandai(id, true); pesan("msgDaftar", teks); $(id).focus() };
+  if(SERVER && !kode) return salah("dKode", "Isi kode pendaftaran dari admin kelas.");
   if(!reUser.test(u)) return salah("dUser", "Username 3 sampai 20 karakter: huruf kecil, angka, titik, atau garis bawah, dan diawali huruf atau angka.");
   if(p.length < 6) return salah("dPass", "Kata sandi minimal 6 karakter.");
   if(p !== p2) return salah("dPass2", "Kata sandi dan pengulangannya belum sama.");
   sibuk(btn, true);
   try{
+    if(SERVER){
+      const salt = acakHex(16), hash = await hashSandi(p, salt);
+      const r = await panggil("/daftar", { u, salt, hash, kode });
+      if(r.status === 403){ sibuk(btn, false); return salah("dKode", "Kode pendaftaran salah.") }
+      if(r.status === 409){ sibuk(btn, false); return salah("dUser", "Username ini sudah dipakai. Coba username lain.") }
+      if(!r.ok){ pesan("msgDaftar", r.pesan || "Pendaftaran gagal. Coba lagi."); sibuk(btn, false); return }
+      toast("Akun berhasil dibuat");
+      await berhasil(u, btn);
+      return;
+    }
     try{ if(punya(await muatAkun(true), u)){ sibuk(btn, false); return salah("dUser", "Username ini sudah terdaftar. Coba username lain.") } }
     catch(err){ /* daftar tidak terbaca: lanjutkan, admin yang akan memeriksa */ }
     const salt = acakHex(16);
     tampilKode(`${u}:${salt}:${await hashSandi(p, salt)}`, u);
-  }catch(err){ pesan("msgDaftar", gagalFitur) }
+  }catch(err){ pesan("msgDaftar", err instanceof GalatJaringan ? gagalMuat : gagalFitur) }
   sibuk(btn, false);
 });
 
@@ -186,6 +225,12 @@ $("kodeLagi").onclick = () => {
   $("dPass").dispatchEvent(new Event("input"));
   setTab("daftar");
 };
+
+// Mode server: tampilkan kolom kode pendaftaran dan ubah teks tombol
+if(SERVER){
+  $("fldKode").classList.remove("hidden");
+  $("btnDaftar").querySelector(".lbl").textContent = "Buat Akun";
+}
 
 /* ---- NAMA LENGKAP ---- */
 function openNameModal(isEdit){
