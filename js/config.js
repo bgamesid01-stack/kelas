@@ -2,7 +2,7 @@
    Pengaturan dan data konten. Ubah file ini untuk menyesuaikan web dengan kelasmu. */
 
 // Alamat Web App Google Apps Script untuk login (lihat README.md, bagian "Memasang login Google Sheet").
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjZH0Zw1rk1RYSrtAyu4cyvqiJ7XjVFFKIsbDiz_02fsCQnr8riLMAzYQL38mKg6uN/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYmDLwBrw1Vp_WqyBntX3v5ViAFiAmS0ZlVzkCzSO03Xx9LBTp4Ice6EB3bgA4qGBJ8A/exec";
 
 const NAMA_KELAS = "XII AK 1";
 const JADWAL = {
