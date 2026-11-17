@@ -3,7 +3,7 @@
 
 // Isi dengan OAuth Client ID dari Google Cloud Console (tipe: Web application).
 // Kalau masih kosong, tombol Google asli tidak muncul dan tersedia mode demo.
-const URL_SERVER_AKUN = "https://kelas-akun.b-gamesid01.workers.dev/";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGg8W7FfnM8H-G2lpdkMMhFKcZ3lEXkqygZxhqK2fZnhHv1wgvgW4I0Xw-7ga-jWem/exec";
 const GOOGLE_CLIENT_ID = "";
 
 const NAMA_KELAS = "Kelas XII AK 1";
