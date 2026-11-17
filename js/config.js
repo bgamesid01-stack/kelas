@@ -1,14 +1,12 @@
 /* js/config.js
    Pengaturan dan data konten. Ubah file ini untuk menyesuaikan web dengan kelasmu. */
 
-// Isi dengan OAuth Client ID dari Google Cloud Console (tipe: Web application).
-// Kalau masih kosong, tombol Google asli tidak muncul dan tersedia mode demo.
+// Alamat Web App Google Apps Script untuk login (lihat README.md, bagian "Memasang login Google Sheet").
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGg8W7FfnM8H-G2lpdkMMhFKcZ3lEXkqygZxhqK2fZnhHv1wgvgW4I0Xw-7ga-jWem/exec";
-const GOOGLE_CLIENT_ID = "";
 
-const NAMA_KELAS = "Kelas XII AK 1";
+const NAMA_KELAS = "XII AK 1";
 const JADWAL = {
-  Senin:  ["KKA 1", "B. Jepang", "MP AK", "B. Inggris", "-"],
+  Senin:  ["-", "-", "-", "-", "-"],
   Selasa: ["-", "-", "-", "-", "-"],
   Rabu:   ["-", "-", "-", "-", "-"],
   Kamis:  ["-", "-", "-", "-", "-"],
