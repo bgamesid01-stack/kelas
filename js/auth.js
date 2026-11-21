@@ -14,6 +14,7 @@ function route(){
 function onLogin(user){
   session = user; store.set("kelas_session", session);
   route();
+  if(typeof segarkanTeman === "function") segarkanTeman();   // periksa teman dan pesan baru
 }
 
 /* ---- LOGIN DAN DAFTAR ---- */
@@ -102,14 +103,14 @@ function catatGagal(u){
 }
 
 // Animasi berhasil lalu masuk ke beranda. Nama lengkap berasal dari Sheet.
-async function berhasil(email, nama, btn){
+async function berhasil(email, nama, token, btn){
   btn.classList.remove("busy"); btn.classList.add("done");
   await tunggu(750);
   $("authShell").classList.add("out");
   await tunggu(450);
   profiles[email] = { fullName: nama };
   store.set("kelas_profiles", profiles);
-  onLogin({ sub: email, email, picture: "", gname: nama });
+  onLogin({ sub: email, email, picture: "", gname: nama, token });
   // kembalikan formulir ke keadaan awal untuk login berikutnya
   $("authShell").classList.remove("out"); btn.classList.remove("done"); btn.disabled = false;
   ["lEmail","lPass","dNama","dEmail","dPass","dPass2","dKode"].forEach(id => $(id).value = "");
@@ -133,7 +134,7 @@ $("formMasuk").addEventListener("submit", async e => {
   sibuk(btn, true);
   try{
     const r = await panggil({ aksi:"masuk", email, hash: await hashSandi(p, email) });
-    if(r.ok){ delete gagalMasuk[email]; return await berhasil(email, r.nama, btn) }
+    if(r.ok){ delete gagalMasuk[email]; return await berhasil(email, r.nama, r.token, btn) }
     if(r.galat === "terkunci"){ pesan("msgMasuk", "Terlalu banyak percobaan. Coba lagi beberapa menit lagi."); sibuk(btn, false); return }
     if(r.galat === "salah"){
       catatGagal(email); tandai("lEmail", true); tandai("lPass", true);
@@ -158,7 +159,7 @@ $("formDaftar").addEventListener("submit", async e => {
   sibuk(btn, true);
   try{
     const r = await panggil({ aksi:"daftar", nama, email, hash: await hashSandi(p, email), kode });
-    if(r.ok){ toast("Akun berhasil dibuat"); return await berhasil(email, r.nama || nama, btn) }
+    if(r.ok){ toast("Akun berhasil dibuat"); return await berhasil(email, r.nama || nama, r.token, btn) }
     sibuk(btn, false);
     if(r.galat === "perlu_kode"){ $("fldKode").classList.remove("hidden"); return salah("dKode", "Masukkan kode pendaftaran dari admin kelas.") }
     if(r.galat === "kode_salah") return salah("dKode", "Kode pendaftaran salah.");
@@ -199,5 +200,6 @@ $("fullName").addEventListener("keydown", e => { if(e.key === "Enter") saveName(
 $("cancelName").onclick = () => $("vName").classList.add("hidden");
 $("editName").onclick = () => openNameModal(true);
 $("logout").onclick = () => {
+  if(typeof resetTeman === "function") resetTeman();
   session = null; store.set("kelas_session", null); route();
 };

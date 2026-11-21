@@ -3,13 +3,17 @@
 
 /* ---- HALAMAN ---- */
 let curPage = "beranda";
+const HALAMAN_TERPISAH = ["catatan", "teman"];
 function go(p){
   curPage = p;
-  const n = p === "catatan";
-  document.querySelectorAll(".pg-home").forEach(e => e.classList.toggle("hidden", n));
-  $("catatan").classList.toggle("hidden", !n);
+  const terpisah = HALAMAN_TERPISAH.includes(p);
+  document.querySelectorAll(".pg-home").forEach(e => e.classList.toggle("hidden", terpisah));
+  HALAMAN_TERPISAH.forEach(id => $(id).classList.toggle("hidden", id !== p));
   document.querySelectorAll("[data-go]").forEach(a => a.classList.toggle("on", a.dataset.go === p));
-  if(n){ renderNotes(); window.scrollTo(0, 0); return }
+  if(p !== "teman") tutupTeman();
+  if(p === "catatan") renderNotes();
+  if(p === "teman") bukaTeman();
+  if(terpisah){ window.scrollTo(0, 0); return }
   const t = p === "beranda" ? null : $(p);
   window.scrollTo({ top: t ? t.getBoundingClientRect().top + window.scrollY - 84 : 0, behavior: "smooth" });
 }
