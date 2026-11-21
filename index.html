@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="css/sections.css">
   <link rel="stylesheet" href="css/dokumentasi.css">
   <link rel="stylesheet" href="css/notes.css">
+  <link rel="stylesheet" href="css/chat.css">
   <link rel="stylesheet" href="css/protect.css">
 </head>
 <body>
@@ -106,6 +107,7 @@
         <a href="#tugas" data-go="tugas">Tugas Kelas</a>
         <a href="#dokumentasi" data-go="dokumentasi">Dokumentasi</a>
         <a href="#jadwal" data-go="jadwal">Jadwal</a>
+        <a href="#teman" data-go="teman">Teman<span class="dot-teman hidden"></span></a>
         <a href="#catatan" data-go="catatan">Catatan</a>
       </nav>
       <button id="akunBtn" class="akun" type="button" aria-label="Buka menu akun" aria-controls="drawer"></button>
@@ -125,6 +127,7 @@
       <a href="#tugas" data-go="tugas">Tugas Kelas</a>
       <a href="#dokumentasi" data-go="dokumentasi">Dokumentasi</a>
       <a href="#jadwal" data-go="jadwal">Jadwal</a>
+      <a href="#teman" data-go="teman">Teman<span class="dot-teman hidden"></span></a>
       <a href="#catatan" data-go="catatan">Catatan</a>
     </nav>
     <div class="dr-foot">
@@ -193,6 +196,41 @@
       </div>
     </div>
   </main>
+
+  <main id="teman" class="notes hidden">
+    <div class="wrap">
+      <div class="tm" id="tm">
+        <aside class="tm-list card">
+          <div class="ch"><span class="ico" style="background:var(--sun)">💬</span><h2>Teman</h2></div>
+          <form id="formCari" class="tm-cari" novalidate>
+            <input id="cariEmail" type="email" inputmode="email" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Cari teman lewat email" aria-label="Email teman">
+            <button type="submit" class="btn">Cari</button>
+          </form>
+          <div id="hasilCari" class="tm-hasil" aria-live="polite"></div>
+          <div id="tmMasuk"></div>
+          <ul id="tmTeman" class="tm-items"></ul>
+          <div id="tmKeluar"></div>
+          <p id="tmInfo" class="tm-info"></p>
+        </aside>
+        <section class="tm-chat card" id="tmChat">
+          <div class="tm-kosong">Pilih teman di daftar untuk mulai mengobrol.</div>
+          <div class="tm-isi">
+            <div class="tm-head">
+              <button type="button" class="btn white tm-back" id="tmBack">Kembali</button>
+              <b id="tmNama"></b>
+              <button type="button" class="btn pink" id="tmHapus">Hapus Teman</button>
+            </div>
+            <p class="tm-note">Pesan tersimpan di Sheet kelas dan dapat dibaca admin. Gunakan bahasa yang sopan.</p>
+            <div class="tm-pesan" id="tmPesan" aria-live="polite"></div>
+            <form class="tm-kirim" id="formKirim">
+              <textarea id="tmIsi" rows="1" maxlength="500" placeholder="Tulis pesan..." aria-label="Tulis pesan"></textarea>
+              <button type="submit">Kirim</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
 </div>
 
 <!-- MODAL NAMA LENGKAP -->
@@ -225,6 +263,7 @@
 <script src="js/dokumentasi.js" defer></script>
 <script src="js/navigation.js" defer></script>
 <script src="js/notes.js" defer></script>
+<script src="js/chat.js" defer></script>
 <script src="js/protect.js" defer></script>
 <script src="js/main.js" defer></script>
 </body>
