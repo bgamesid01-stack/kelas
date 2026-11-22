@@ -25,7 +25,8 @@ function galatTeks(r){
     bukan_teman: "Kalian belum berteman.",
     isi_salah: "Pesan kosong atau terlalu panjang (maksimal 500 huruf).",
     tidak_ada: "Data tidak ditemukan. Muat ulang halaman Teman.",
-    data_salah: "Data belum valid."
+    data_salah: "Data belum valid.",
+    bukan_pengirim: "Hanya pengirim yang bisa menghapus pesan untuk semua orang."
   };
   return peta[r.galat] || "Terjadi kesalahan di server. Coba lagi.";
 }
@@ -70,7 +71,7 @@ $("formCari").addEventListener("submit", async e => {
   e.preventDefault();
   if(!adaToken()) return;
   const em = $("cariEmail").value.trim().toLowerCase(), box = $("hasilCari");
-  if(!reEmail.test(em)){ box.innerHTML = '<p class="tm-info">Email belum benar.</p>'; return }
+  if(!reEmail.test(em)){ box.innerHTML = '<p class="tm-info">Format email belum benar.</p>'; return }
   box.innerHTML = '<p class="tm-info">Mencari...</p>';
   try{
     const r = await api("cari", { email: em });
@@ -99,12 +100,61 @@ async function aksiTeman(aksi, data, pesanOk){
 function gelembung(m){
   const d = document.createElement("div");
   d.className = "tm-b " + (m.dari === session.sub ? "saya" : "dia");
+  d.dataset.dari = m.dari;
   if(m.id) d.dataset.id = m.id;
-  const p = document.createElement("p"); p.textContent = m.isi;       // textContent: aman dari HTML
+  const p = document.createElement("p");
+  p.textContent = m.hapus ? teksHapus(m.dari) : m.isi;               // textContent: aman dari HTML
+  if(m.hapus) d.classList.add("hapus");
   const k = document.createElement("small"); k.textContent = m.waktu ? jamDari(m.waktu) : "mengirim...";
   d.appendChild(p); d.appendChild(k);
   return d;
 }
+const teksHapus = dari => dari === session.sub ? "Kamu menghapus pesan ini" : "Pesan ini telah dihapus";
+
+// Mengubah gelembung menjadi keterangan "pesan dihapus"
+function jadiHapus(b){
+  b.classList.add("hapus");
+  b.children[0].textContent = teksHapus(b.dataset.dari);
+  tutupAksi();
+}
+
+// Menerapkan pesan lama yang berubah: dihapus untuk semua, atau disembunyikan oleh pengguna ini (perangkat lain)
+function terapkanHapus(r){
+  const box = $("tmPesan");
+  (r.hapusSemua || []).forEach(id => { const b = box.querySelector(`[data-id="${id}"]`); if(b && !b.classList.contains("hapus")) jadiHapus(b) });
+  (r.sembunyi || []).forEach(id => { const b = box.querySelector(`[data-id="${id}"]`); if(b) b.remove() });
+}
+
+// Menu kecil di bawah pesan: Hapus untuk saya / Hapus untuk semua
+function tutupAksi(){ const a = $("tmPesan").querySelector(".tm-aksi"); if(a) a.remove() }
+function bukaAksi(b){
+  const sudah = b.querySelector(".tm-aksi");
+  tutupAksi();
+  if(sudah) return;
+  const a = document.createElement("div"); a.className = "tm-aksi";
+  const tombol = (teks, untuk) => { const t = document.createElement("button"); t.type = "button"; t.textContent = teks; t.dataset.hapus = untuk; return t };
+  a.appendChild(tombol("Hapus untuk saya", "saya"));
+  if(b.dataset.dari === session.sub && !b.classList.contains("hapus")) a.appendChild(tombol("Hapus untuk semua", "semua"));
+  b.appendChild(a);
+}
+
+$("tmPesan").addEventListener("click", async e => {
+  const t = e.target.closest("button");
+  if(t && t.dataset.hapus){
+    const b = t.closest(".tm-b"), id = b && b.dataset.id;
+    if(!id) return;
+    if(t.dataset.hapus === "semua" && !confirm("Hapus pesan ini untuk semua orang? Temanmu tidak akan bisa melihat isinya lagi.")) return;
+    try{
+      const r = await api("pesanHapus", { id: Number(id), untuk: t.dataset.hapus });
+      if(!r.ok){ toast(galatTeks(r)); return }
+      if(t.dataset.hapus === "saya") b.remove(); else jadiHapus(b);
+      muatAman();
+    }catch(err){ kabarJaringan(err) }
+    return;
+  }
+  const b = e.target.closest(".tm-b");
+  if(b && b.dataset.id && !b.classList.contains("kirim") && !b.classList.contains("gagal")) bukaAksi(b);
+});
 
 function tandaiBaca(){
   if(!TM.aktif) return;
@@ -133,6 +183,7 @@ async function ambil(awal){
     if(dengan !== TM.aktif) return;
     if(!r.ok){ if(r.galat === "bukan_teman"){ toast("Kalian belum berteman."); tutupChat(); muatAman() } return }
     tambahPesan(r.pesan, awal);
+    terapkanHapus(r);
   }catch(err){ /* diabaikan, dicoba lagi pada putaran berikutnya */ }
   finally{ TM.memuat = false }
 }
