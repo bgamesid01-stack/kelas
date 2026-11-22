@@ -71,7 +71,7 @@ $("formCari").addEventListener("submit", async e => {
   e.preventDefault();
   if(!adaToken()) return;
   const em = $("cariEmail").value.trim().toLowerCase(), box = $("hasilCari");
-  if(!reEmail.test(em)){ box.innerHTML = '<p class="tm-info">Format email belum benar.</p>'; return }
+  if(!reEmail.test(em)){ box.innerHTML = '<p class="tm-info">Email belum benar.</p>'; return }
   box.innerHTML = '<p class="tm-info">Mencari...</p>';
   try{
     const r = await api("cari", { email: em });
