@@ -301,6 +301,38 @@
   color: #1b2a4a;
 }
 
+.tm-b[data-id] {
+  cursor: pointer;
+}
+
+.tm-b.hapus p {
+  font-style: italic;
+  opacity: .75;
+}
+
+.tm-aksi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.tm-aksi button {
+  padding: 5px 12px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font-size: .78rem;
+  font-weight: 800;
+  opacity: .9;
+}
+
+.tm-aksi button:hover {
+  opacity: 1;
+  background: rgba(127, 127, 127, .18);
+}
+
 .tm-b.kirim {
   opacity: .6;
 }
